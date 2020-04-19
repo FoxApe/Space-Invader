@@ -126,13 +126,15 @@ def main():
 
     background_image = pygame.image.load("cosmo.png").convert_alpha()
         
-    player_image = pygame.image.load("space_ship.png").convert_alpha()
+    ship = pygame.image.load("space_ship.png").convert_alpha()
 
     sprite_sheet = pygame.image.load("invaders.png").convert_alpha()
 
     laser_sound = pygame.mixer.Sound("laser5.ogg")
 
     alien_type1 = sprite_sheet.subsurface(380, 40, 100, 85)
+
+    player_image = ship.subsurface(260,175,320,253)
     
     #Game loop
     while True:
