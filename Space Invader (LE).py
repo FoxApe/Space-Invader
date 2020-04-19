@@ -13,6 +13,8 @@ import random
 
 from pygame.locals import *
 
+import pygame
+
 def main():
 
     pygame.init()
@@ -102,6 +104,23 @@ def main():
     #x = (screen_width * 0.42)
     #y = (screen_height * 0.66)
     
+    display_width = 900
+    display_height = 600
+
+    screen = pygame.display.set_mode((display_width,display_height))
+    pygame.display.set_caption("Space Invader")
+
+    clock = pygame.time.Clock()
+    done = False
+    
+    def spaceship(x,y):
+        screen.blit(player_image, (x,y))
+
+    x = (display_width * 0.385)
+    y = (display_height * 0.8)
+
+    x_change = 0
+    
     #Game loop
     while True:
         screen.fill((0, 0, 0))
@@ -120,10 +139,21 @@ def main():
             if event.type == pygame.KEYDOWN:
 
                 if event.key == pygame.K_LEFT:
-                    spaceship.x -= 30
+                    #spaceship.x -= 30
+                    x_change = -5
                    
                 elif event.key== pygame.K_RIGHT:
-                    spaceship.x += 30
+                    #spaceship.x += 30
+                    x_change = 5
+                    
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                    x_change = 0
+                    
+        x += x_change       
+        screen.blit(background_image, [0, 0])
+        spaceship(x,y)
+                
                    
         #Drawing stuff
         #Loading up image file and cutting the sprite sheet and audio
@@ -139,6 +169,7 @@ def main():
 
         #Drawing
         screen.blit(background_image, [0,0])
+        screen.blit(player_image, (x, y)) 
 
         #Row 1 (row1y)
         alien1x += x_speed
@@ -195,21 +226,19 @@ def main():
         screen.blit(alien_type1, [alien24x, row3y])
 
         #This detectes if the aliens are touching the sides or not
-        if (alien22x+100 >= 900) or (alien1x <= 0):
+        if (alien22x + 100 >= 900) or (alien1x <= 0):
             x_speed = -x_speed
-            row1y += 10
-            row2y += 10
-            row3y += 10
+            #row1y += 10
+            #row2y += 10
+            #row3y += 10
             
         
         #Spaceship
-        pygame.draw.rect(screen, RED, spaceship)
+        #pygame.draw.rect(screen, RED, spaceship)
         
         pygame.display.flip()
         fpsClock.tick(fps)
         time.sleep(0.05)
-
-
 
 main()
 
@@ -222,13 +251,4 @@ main()
 ##plus x_speed
 ##blit it with alien_type1
 #They must be 102 pixel side to side in one row.
-
-
-
-
-
-
-
-
-
 
