@@ -120,6 +120,19 @@ def main():
     y = (display_height * 0.8)
 
     x_change = 0
+
+    #Drawing stuff
+    #Loading up image file and cutting the sprite sheet and audio
+
+    background_image = pygame.image.load("cosmo.png").convert_alpha()
+        
+    player_image = pygame.image.load("space_ship.png").convert_alpha()
+
+    sprite_sheet = pygame.image.load("invaders.png").convert_alpha()
+
+    laser_sound = pygame.mixer.Sound("laser5.ogg")
+
+    alien_type1 = sprite_sheet.subsurface(380, 40, 100, 85)
     
     #Game loop
     while True:
@@ -153,19 +166,7 @@ def main():
         x += x_change       
         screen.blit(background_image, [0, 0])
         spaceship(x,y)
-                
-                   
-        #Drawing stuff
-        #Loading up image file and cutting the sprite sheet and audio
-        background_image = pygame.image.load("cosmo.png")
         
-        player_image = pygame.image.load("space_ship.png")
-
-        sprite_sheet = pygame.image.load("invaders.png")
-
-        laser_sound = pygame.mixer.Sound("laser5.ogg")
-
-        alien_type1 = sprite_sheet.subsurface(380, 40, 100, 85)
 
         #Drawing
         screen.blit(background_image, [0,0])
@@ -251,4 +252,3 @@ main()
 ##plus x_speed
 ##blit it with alien_type1
 #They must be 102 pixel side to side in one row.
-
