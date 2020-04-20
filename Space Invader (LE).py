@@ -32,9 +32,11 @@ def main():
 
     pygame.display.set_caption("Space Invaders")
 
-    background_image = pygame.image.load("cosmo.png")
+    background_image = pygame.image.load("cosmo.png").convert_alpha()
 
-    player_image = pygame.image.load("space_ship.png")
+    player_image = pygame.image.load("space_ship.png").convert_alpha()
+
+    laser_beam = pygame.image. load("laser_beam.png").convert_alpha()
 
     #Define some colors
     BLACK = (0, 0, 0)
@@ -46,7 +48,7 @@ def main():
     WHITE = (255, 255, 255)
 
     #Spaceship
-    spaceship = pygame.rect.Rect(430, 500, 50, 50)
+    #spaceship = pygame.rect.Rect(430, 500, 50, 50)
 
     #Variables here
     #Aliens' speed
@@ -121,6 +123,14 @@ def main():
 
     x_change = 0
 
+    def laser(x,y):
+        screen.blit(laser_beam, [335, 485])
+
+    #x1 = (display_width * 0.385)
+    #y1 = (display_height * 0.8)
+
+    #y_change = 0
+
     #Drawing stuff
     #Loading up image file and cutting the sprite sheet and audio
 
@@ -129,6 +139,8 @@ def main():
     ship = pygame.image.load("space_ship.png").convert_alpha()
 
     sprite_sheet = pygame.image.load("invaders.png").convert_alpha()
+
+    laser_beam = pygame.image. load("laser_beam.png").convert_alpha()
 
     laser_sound = pygame.mixer.Sound("laser5.ogg")
 
@@ -157,22 +169,29 @@ def main():
                     #spaceship.x -= 30
                     x_change = -5
                    
-                elif event.key== pygame.K_RIGHT:
+                elif event.key == pygame.K_RIGHT:
                     #spaceship.x += 30
                     x_change = 5
+
+                #elif event.key == pygame.KEYUP:
+                    #y_change = 5
                     
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                     x_change = 0
                     
+                    
         x += x_change       
         screen.blit(background_image, [0, 0])
         spaceship(x,y)
+        #y1 += y_change
+        #laser(x,y)
         
 
         #Drawing
         screen.blit(background_image, [0,0])
-        screen.blit(player_image, (x, y)) 
+        screen.blit(player_image, (x, y))
+        screen.blit(laser_beam, [335, 485])
 
         #Row 1 (row1y)
         alien1x += x_speed
