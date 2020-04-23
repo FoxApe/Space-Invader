@@ -122,7 +122,8 @@ def main():
     y = (display_height * 0.8)
 
     x_change = 0
-
+    lasery = y
+    
     def laser(x,y):
         screen.blit(laser_beam, [335, 485])
 
@@ -164,6 +165,12 @@ def main():
 
             #Controls here
             if event.type == pygame.KEYDOWN:
+                
+                if event.key == pygame.K_SPACE:
+##                    laser_sound.play()
+##                    laer_beamx =
+                    if lasery > 0:
+                        screen.blit(laser_beam, [x,lasery])
 
                 if event.key == pygame.K_LEFT:
                     #spaceship.x -= 30
@@ -179,6 +186,13 @@ def main():
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                     x_change = 0
+
+
+            if lasery <= 0:
+                leasery = y
+
+            if lasery > 0:
+                lasery += 5
                     
                     
         x += x_change       
@@ -210,6 +224,7 @@ def main():
         screen.blit(alien_type1, [alien19x, row1y])
         alien22x += x_speed
         screen.blit(alien_type1, [alien22x, row1y])
+      
         
         #Row 2 (row2y)
         alien2x += x_speed
