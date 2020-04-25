@@ -15,6 +15,10 @@ from pygame.locals import *
 
 import pygame
 
+import random
+
+   
+
 def main():
 
     pygame.init()
@@ -22,10 +26,6 @@ def main():
     #Set the width and height of the screen [width,height]
     size = [900, 600]
     screen = pygame.display.set_mode(size)
-
-    #screen_width = 900
-    #screen_height = 600
-    #screen = pygame.display.set_mode((screen_width, screen_height))
     
     fps = 60
     fpsClock = pygame.time.Clock()
@@ -47,9 +47,6 @@ def main():
     RED = (250, 0, 0)
     WHITE = (255, 255, 255)
 
-    #Spaceship
-    #spaceship = pygame.rect.Rect(430, 500, 50, 50)
-
     #Variables here
     #Aliens' speed
     x_speed = 3
@@ -57,6 +54,18 @@ def main():
     #Spaceship's speed
     xspeed = 5
     yspeed = 5
+
+    life = True
+    score = 0
+
+    
+    laserx = 0
+    lasery = 0
+    again = True
+
+    bulletx = 0
+    bullety = 0
+    shoot = True
 
     #Alien Startin position
     alien1x = 0
@@ -90,21 +99,14 @@ def main():
     alien22x = 770
     alien23x = 770
     alien24x = 770
-    
 
     row1y = 20
     row2y = 140
     row3y = 260
 
-    #Score & Life
-    #score = 0
-    #life = 3
+    alien_list = [[alien1x, row1y],[alien4x, row1y],[alien7x, row1y],[alien10x, row1y],[alien13x, row1y],[alien16x, row1y],[alien19x, row1y],[alien22x, row1y],[alien2x, row2y],[alien5x, row2y],[alien8x, row2y],[alien11x, row2y],[alien14x, row2y],[alien17x, row2y],[alien20x, row2y],[alien23x, row2y],[alien3x, row3y],[alien6x, row3y],[alien9x, row3y],[alien12x, row3y],[alien15x, row3y],[alien18x, row3y],[alien21x, row3y],[alien24x, row3y]]
 
-    #def invader(x,y):
-        #screen.blit(player_image, (x,y))
 
-    #x = (screen_width * 0.42)
-    #y = (screen_height * 0.66)
     
     display_width = 900
     display_height = 600
@@ -122,15 +124,21 @@ def main():
     y = (display_height * 0.8)
 
     x_change = 0
-    lasery = y
-    
+
+    def alien(x,y):
+        screen.blit(alien_type1, [x, y])
+
+    def alien_update(x):
+        x+=x_speed
+        return x
+        
     def laser(x,y):
         screen.blit(laser_beam, [335, 485])
 
-    #x1 = (display_width * 0.385)
-    #y1 = (display_height * 0.8)
-
-    #y_change = 0
+    def texts(score,location_x,location_y,text,colour,size):
+       font=pygame.font.Font(None,size)
+       scoretext=font.render(text+str(score), 1,colour)
+       screen.blit(scoretext, (location_x, location_y))
 
     #Drawing stuff
     #Loading up image file and cutting the sprite sheet and audio
@@ -148,6 +156,8 @@ def main():
     alien_type1 = sprite_sheet.subsurface(380, 40, 100, 85)
 
     player_image = ship.subsurface(260,175,320,253)
+
+    
     
     #Game loop
     while True:
@@ -155,136 +165,108 @@ def main():
         for event in pygame.event.get():
             if event.type == QUIT:
               pygame.quit()
-              sys.exit()
-              
-        #screen.blit(background_image, [0,0])
-        #invader(x,y)
-
-        #pygame.display.update()
-        #fpsClock = pygame.time.Clock()
+              sys.exit()            
 
             #Controls here
             if event.type == pygame.KEYDOWN:
-                
-                if event.key == pygame.K_SPACE:
-##                    laser_sound.play()
-##                    laer_beamx =
-                    if lasery > 0:
-                        screen.blit(laser_beam, [x,lasery])
 
                 if event.key == pygame.K_LEFT:
-                    #spaceship.x -= 30
-                    x_change = -5
+                    x_change = -10
                    
                 elif event.key == pygame.K_RIGHT:
-                    #spaceship.x += 30
-                    x_change = 5
-
-                #elif event.key == pygame.KEYUP:
-                    #y_change = 5
+                    x_change = 10
                     
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                     x_change = 0
 
 
-            if lasery <= 0:
-                leasery = y
-
-            if lasery > 0:
-                lasery += 5
                     
+
+        #Loser statement
+        if life == False:
+            screen.blit(background_image, [0,0])
+            texts('',200,230,"GAME OVER",WHITE,120)
+        #This check if its gameover or not
+        if life == True:
                     
-        x += x_change       
-        screen.blit(background_image, [0, 0])
-        spaceship(x,y)
-        #y1 += y_change
-        #laser(x,y)
-        
+            x += x_change       
+            spaceship(x,y)
 
-        #Drawing
-        screen.blit(background_image, [0,0])
-        screen.blit(player_image, (x, y))
-        screen.blit(laser_beam, [335, 485])
+            #Drawing
+            screen.blit(background_image, [0,0])
+            screen.blit(player_image, (x, y))
+            screen.blit(laser_beam, [335, 485])
 
-        #Row 1 (row1y)
-        alien1x += x_speed
-        screen.blit(alien_type1, [alien1x, row1y])
-        alien4x += x_speed
-        screen.blit(alien_type1, [alien4x, row1y])
-        alien7x += x_speed
-        screen.blit(alien_type1, [alien7x, row1y])
-        alien10x += x_speed
-        screen.blit(alien_type1, [alien10x, row1y])
-        alien13x += x_speed
-        screen.blit(alien_type1, [alien13x, row1y])
-        alien16x += x_speed
-        screen.blit(alien_type1, [alien16x, row1y])
-        alien19x += x_speed
-        screen.blit(alien_type1, [alien19x, row1y])
-        alien22x += x_speed
-        screen.blit(alien_type1, [alien22x, row1y])
-      
-        
-        #Row 2 (row2y)
-        alien2x += x_speed
-        screen.blit(alien_type1, [alien2x, row2y])
-        alien5x += x_speed
-        screen.blit(alien_type1, [alien5x, row2y])
-        alien8x += x_speed
-        screen.blit(alien_type1, [alien8x, row2y])
-        alien11x += x_speed
-        screen.blit(alien_type1, [alien11x, row2y])
-        alien14x += x_speed
-        screen.blit(alien_type1, [alien14x, row2y])
-        alien17x += x_speed
-        screen.blit(alien_type1, [alien17x, row2y])
-        alien20x += x_speed
-        screen.blit(alien_type1, [alien20x, row2y])
-        alien23x += x_speed
-        screen.blit(alien_type1, [alien23x, row2y])
+            if again == True:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        again = False
 
-        #Row 3 (row3y)
-        alien3x += x_speed
-        screen.blit(alien_type1, [alien3x, row3y])
-        alien6x += x_speed
-        screen.blit(alien_type1, [alien6x, row3y])
-        alien9x += x_speed
-        screen.blit(alien_type1, [alien9x, row3y])
-        alien12x += x_speed
-        screen.blit(alien_type1, [alien12x, row3y])
-        alien15x += x_speed
-        screen.blit(alien_type1, [alien15x, row3y])
-        alien18x += x_speed
-        screen.blit(alien_type1, [alien18x, row3y])
-        alien21x += x_speed
-        screen.blit(alien_type1, [alien21x, row3y])
-        alien24x += x_speed
-        screen.blit(alien_type1, [alien24x, row3y])
+            #This updates x of aliex
+            for coord in (alien_list):
+                new_alienx = alien_update(coord[0])
+                coord[0] = new_alienx
 
-        #This detectes if the aliens are touching the sides or not
-        if (alien22x + 100 >= 900) or (alien1x <= 0):
-            x_speed = -x_speed
-            #row1y += 10
-            #row2y += 10
-            #row3y += 10
+            #This draws the aliens
+            for coord in (alien_list):
+                alien(coord[0],coord[1])
+
+            #This draw alien bullet
+            if shoot == True:
+                for coord in (alien_list):
+                    luck = random.randint(1,200)
+                    if luck == 2:
+                        bullety = int(coord[1]+42)
+                        bulletx = int(coord[0]+40)
+                        shoot = False
+                        
+            #Updates alien bullet
+            if shoot == False:
+                bullety += 10
+                pygame.draw.circle(screen, BLUE, (bulletx, bullety), 10)
+                
+            #Check if it is off the screen
+            if bullety >= 600:
+                shoot = True
+
+            #This check if it collides with the spaceship
+            if (bullety <= y + 1) and (bullety + 10 >= y):
+                if (bulletx + 15 >= x) and (bulletx <= x + 160):
+                    shoot = True
+                    life = False
+
+            #This updates the laser
+            if again == True:
+                lasery = int(y)
+                laserx = int(x + 140)           
+
+            if again == False:
+                lasery -= 10
+                pygame.draw.circle(screen, WHITE, (laserx, lasery), 10)
+
+            if lasery <= -10:
+                again = True
+
+            #This detectes if the aliens are touching the sides or not
+            for coord in alien_list:
+                if (coord[0] <= 0) or (coord[0] +100 >= 900):
+                    x_speed = -x_speed
+
+            #This detects if it hits or not
+            for coord in (alien_list):
+                if (lasery + 10 >= coord[1] + 85) and (lasery <= coord[1] + 85):
+                    if (laserx + 10 >= coord[0]) and (laserx <= coord[0] + 100):
+                        alien_list.remove(coord)
+                        again = True
+                        
+        #Winner statment
+        if alien_list == []:
+            texts('',300,230,"YOU WIN",WHITE,120)
             
-        
-        #Spaceship
-        #pygame.draw.rect(screen, RED, spaceship)
-        
+        #Updating the screen
         pygame.display.flip()
         fpsClock.tick(fps)
         time.sleep(0.05)
 
 main()
-
-
-
-##Instruction for drawing
-##put your starting x coord in staring position
-##name the variable 'alien(number)x'
-##go to the row you want
-##plus x_speed
-##blit it with alien_type1
-#They must be 102 pixel side to side in one row.
